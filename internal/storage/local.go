@@ -4,7 +4,6 @@ Copyright © 2025 Wim Wenigerkind <wenigerkind@heptacom.de>
 package storage
 
 import (
-	"context"
 	"io"
 	"os"
 	"path/filepath"
@@ -21,7 +20,7 @@ func NewLocalBackend(basePath string) *LocalBackend {
 	}
 }
 
-func (l *LocalBackend) Write(ctx context.Context, key string, reader io.Reader) error {
+func (l *LocalBackend) Write(key string, reader io.Reader) error {
 	fullPath := filepath.Join(l.basePath, key)
 
 	if err := os.MkdirAll(filepath.Dir(fullPath), 0755); err != nil {
@@ -38,17 +37,17 @@ func (l *LocalBackend) Write(ctx context.Context, key string, reader io.Reader) 
 	return err
 }
 
-func (l *LocalBackend) Read(ctx context.Context, key string) (io.ReadCloser, error) {
+func (l *LocalBackend) Read(key string) (io.ReadCloser, error) {
 	fullPath := filepath.Join(l.basePath, key)
 	return os.Open(fullPath)
 }
 
-func (l *LocalBackend) Delete(ctx context.Context, key string) error {
+func (l *LocalBackend) Delete(key string) error {
 	fullPath := filepath.Join(l.basePath, key)
 	return os.Remove(fullPath)
 }
 
-func (l *LocalBackend) List(ctx context.Context, prefix string) ([]Object, error) {
+func (l *LocalBackend) List(prefix string) ([]Object, error) {
 	var objects []Object
 	prefixPath := filepath.Join(l.basePath, prefix)
 
@@ -80,7 +79,7 @@ func (l *LocalBackend) List(ctx context.Context, prefix string) ([]Object, error
 	return objects, err
 }
 
-func (l *LocalBackend) Exists(ctx context.Context, key string) (bool, error) {
+func (l *LocalBackend) Exists(key string) (bool, error) {
 	fullPath := filepath.Join(l.basePath, key)
 	_, err := os.Stat(fullPath)
 	if err != nil {
