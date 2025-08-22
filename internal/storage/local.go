@@ -79,3 +79,15 @@ func (l *LocalBackend) List(ctx context.Context, prefix string) ([]Object, error
 
 	return objects, err
 }
+
+func (l *LocalBackend) Exists(ctx context.Context, key string) (bool, error) {
+	fullPath := filepath.Join(l.basePath, key)
+	_, err := os.Stat(fullPath)
+	if err != nil {
+		if os.IsNotExist(err) {
+			return false, nil
+		}
+		return false, err
+	}
+	return true, nil
+}
