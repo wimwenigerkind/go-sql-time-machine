@@ -36,3 +36,8 @@ func (l *LocalBackend) Write(ctx context.Context, key string, reader io.Reader) 
 	_, err = io.Copy(file, reader)
 	return err
 }
+
+func (l *LocalBackend) Read(ctx context.Context, key string) (io.ReadCloser, error) {
+	fullPath := filepath.Join(l.basePath, key)
+	return os.Open(fullPath)
+}
