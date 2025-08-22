@@ -18,4 +18,8 @@ func NewBinlogListener(cfg *config.Config) {
 
 	syncer := replication.NewBinlogSyncer(syncerConfig)
 	fmt.Println(syncer)
+
+	// TODO: initialize storage backends
+
+	// TODO: implement WAL
 }
