@@ -4,6 +4,7 @@ Copyright © 2025 Wim Wenigerkind <wenigerkind@heptacom.de>
 package storage
 
 import (
+	"fmt"
 	"io"
 	"os"
 	"path/filepath"
@@ -15,6 +16,10 @@ type LocalBackend struct {
 }
 
 func NewLocalBackend(basePath string) *LocalBackend {
+	if err := os.MkdirAll(basePath, 0755); err != nil {
+		fmt.Printf("Error creating storage backend directory: %v\n", err)
+	}
+
 	return &LocalBackend{
 		basePath: basePath,
 	}
