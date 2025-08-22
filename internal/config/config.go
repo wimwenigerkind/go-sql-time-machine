@@ -15,7 +15,7 @@ type MySQLConfig struct {
 	Port     int    `yaml:"port"`
 	Username string `yaml:"username"`
 	Password string `yaml:"password"`
-	ServerId string `yaml:"server_id"`
+	ServerId uint32 `yaml:"server_id"`
 }
 
 func Load(path string) (*Config, error) {
