@@ -41,3 +41,8 @@ func (l *LocalBackend) Read(ctx context.Context, key string) (io.ReadCloser, err
 	fullPath := filepath.Join(l.basePath, key)
 	return os.Open(fullPath)
 }
+
+func (l *LocalBackend) Delete(ctx context.Context, key string) error {
+	fullPath := filepath.Join(l.basePath, key)
+	return os.Remove(fullPath)
+}
