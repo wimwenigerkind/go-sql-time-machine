@@ -8,6 +8,7 @@ import (
 	"io"
 	"os"
 	"path/filepath"
+	"strings"
 )
 
 type LocalBackend struct {
@@ -45,4 +46,36 @@ func (l *LocalBackend) Read(ctx context.Context, key string) (io.ReadCloser, err
 func (l *LocalBackend) Delete(ctx context.Context, key string) error {
 	fullPath := filepath.Join(l.basePath, key)
 	return os.Remove(fullPath)
+}
+
+func (l *LocalBackend) List(ctx context.Context, prefix string) ([]Object, error) {
+	var objects []Object
+	prefixPath := filepath.Join(l.basePath, prefix)
+
+	err := filepath.Walk(l.basePath, func(path string, info os.FileInfo, err error) error {
+		if err != nil {
+			return err
+		}
+
+		if info.IsDir() {
+			return nil
+		}
+
+		if strings.HasPrefix(path, prefixPath) {
+			relPath, err := filepath.Rel(l.basePath, path)
+			if err != nil {
+				return err
+			}
+
+			objects = append(objects, Object{
+				Key:          filepath.ToSlash(relPath),
+				Size:         info.Size(),
+				LastModified: info.ModTime(),
+			})
+		}
+
+		return nil
+	})
+
+	return objects, err
 }
