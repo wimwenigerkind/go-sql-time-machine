@@ -8,7 +8,8 @@ import (
 )
 
 type Config struct {
-	MySQL MySQLConfig `yaml:"mysql"`
+	MySQL   MySQLConfig     `yaml:"mysql"`
+	Storage []StorageConfig `yaml:"storage"`
 }
 type MySQLConfig struct {
 	Host     string `yaml:"host"`
@@ -16,6 +17,13 @@ type MySQLConfig struct {
 	Username string `yaml:"username"`
 	Password string `yaml:"password"`
 	ServerId uint32 `yaml:"server_id"`
+}
+
+type StorageConfig struct {
+	Type   string            `yaml:"type"`
+	Bucket string            `yaml:"bucket,omitempty"`
+	Path   string            `yaml:"path,omitempty"`
+	Config map[string]string `yaml:"config,omitempty"`
 }
 
 func Load(path string) (*Config, error) {
