@@ -23,11 +23,14 @@ var (
 )
 
 func runReplicate(cmd *cobra.Command, args []string) {
+	// TODO: implement logging
 	cfg, err := config.Load(configFile)
 	if err != nil {
 		fmt.Println(err)
 	}
 	fmt.Println(cfg)
+
+	// TODO: Implement the replication logic
 }
 
 func init() {
